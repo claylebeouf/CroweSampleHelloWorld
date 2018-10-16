@@ -5,12 +5,12 @@ namespace HelloWorldWithRest.Controllers
 {
     public class HelloWorldController : ApiController
     {
-        public ApiRepository apiRepository;
-
         public HelloWorldController()
         {
-            apiRepository = new ApiRepository();
+            ApiRepository = new ApiRepository();
         }
+
+        public ApiRepository ApiRepository { get; set; }
 
         public Message Get()
         {
