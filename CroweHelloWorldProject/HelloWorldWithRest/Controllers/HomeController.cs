@@ -10,12 +10,7 @@ namespace HelloWorldWithRest.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
+        //Make API Call
         string Baseurl = "http://localhost:39295/";
 
         public async Task<ActionResult> Index()
@@ -24,28 +19,35 @@ namespace HelloWorldWithRest.Controllers
 
             using (var client = new HttpClient())
             {
-                //Passing service base url  
-                client.BaseAddress = new Uri(Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                //Define request data format  
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage Res = await client.GetAsync("api/HelloWorld");
-
-                //Checking the response is successful or not which is sent using HttpClient  
-                if (Res.IsSuccessStatusCode)
+                try
                 {
-                    //Storing the response details recieved from web api   
-                    var MsgResponse = Res.Content.ReadAsStringAsync().Result;
+                    //Passing service base url  
+                    client.BaseAddress = new Uri(Baseurl);
 
-                    //Deserializing the response recieved from web api and storing into the Employee list  
-                    message = JsonConvert.DeserializeObject<Message>(MsgResponse);
+                    client.DefaultRequestHeaders.Clear();
+                    //Define request data format  
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                    //Sending request to find web api REST service resource Message using HttpClient  
+                    HttpResponseMessage Res = await client.GetAsync("api/HelloWorld");
+
+                    //Checking the response is successful or not which is sent using HttpClient  
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        //Storing the response details received from web api   
+                        var MsgResponse = Res.Content.ReadAsStringAsync().Result;
+
+                        //Deserializing the response received from web api
+                        message = JsonConvert.DeserializeObject<Message>(MsgResponse);
+
+                    }
+                }
+                catch (Exception)
+                {
+                    message.Response = "Error Processing Request";
                 }
 
-                //returning the employee list to view  
+                //returning the message to view  
                 return View(message);
             }
         }
