@@ -29,17 +29,17 @@ namespace HelloWorldWithRest.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     //Sending request to find web api REST service resource Message using HttpClient  
-                    HttpResponseMessage Res = await client.GetAsync("api/HelloWorld");
-
-                    //Checking the response is successful or not which is sent using HttpClient  
-                    if (Res.IsSuccessStatusCode)
+                    using (HttpResponseMessage res = await client.GetAsync("api/HelloWorld"))
                     {
-                        //Storing the response details received from web api   
-                        var MsgResponse = Res.Content.ReadAsStringAsync().Result;
+                        if (res.IsSuccessStatusCode)
+                        {
+                            //Storing the response details received from web api   
+                            var MsgResponse = res.Content.ReadAsStringAsync().Result;
 
-                        //Deserializing the response received from web api
-                        message = JsonConvert.DeserializeObject<Message>(MsgResponse);
+                            //Deserializing the response received from web api
+                            message = JsonConvert.DeserializeObject<Message>(MsgResponse);
 
+                        }
                     }
                 }
                 catch (Exception)
